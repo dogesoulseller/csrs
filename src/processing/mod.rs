@@ -1,4 +1,4 @@
-mod defs;
+pub mod defs;
 mod track_process;
 mod util;
 
@@ -6,7 +6,7 @@ use defs::*;
 use track_process::*;
 use util::*;
 
-fn get_file_value(lines : & Vec<String>, f : Field) -> Option<String> {
+fn get_file_value(lines : &Vec<String>, f : Field) -> Option<String> {
 	match f {
 		Field::ARTIST | Field::TITLE => {
 			for l in lines {
@@ -50,7 +50,7 @@ fn get_file_value(lines : & Vec<String>, f : Field) -> Option<String> {
 	}
 }
 
-pub fn process_cuesheet(path : &std::string::String) -> Result<CuesheetInfo, String> {
+pub fn process_cuesheet<T: AsRef<std::path::Path>>(path : &T) -> Result<CuesheetInfo, String> {
 	let contents = match std::fs::read_to_string(path) {
 		Ok(x) => x,
 		Err(e) => return Err("Failed to read contents ".to_owned() + &e.to_string())

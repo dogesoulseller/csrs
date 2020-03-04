@@ -6,6 +6,7 @@ pub struct CuesheetTrack {
 	pub artist : String,
 	pub pregap_start : String,
 	pub track_start : String,
+	pub track_end : String
 }
 
 pub struct CuesheetInfo {
@@ -19,14 +20,15 @@ impl CuesheetTrack {
 	pub fn new() -> CuesheetTrack {
 		CuesheetTrack { idx: 0,
 			track_name: std::string::String::new(), artist: std::string::String::new(),
-			pregap_start: std::string::String::new(), track_start: std::string::String::new()
+			pregap_start: std::string::String::new(),
+			track_start: std::string::String::new(), track_end: std::string::String::new()
 		}
 	}
 }
 
 impl fmt::Display for CuesheetTrack {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "TRACK {} - {}\n\tBy {}\n\tPregap: {}\n\tStart: {}",
+		write!(f, "TRACK {} - {} by {}\n\tPregap: {}\n\tStart: {}",
 			self.idx, self.track_name, self.artist, self.pregap_start, self.track_start)
 	}
 }

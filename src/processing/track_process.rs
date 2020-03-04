@@ -61,5 +61,15 @@ pub fn process_tracks(lines : &mut Vec<String>, file_artist : &String) -> Vec<Cu
 		out_vec.push(track);
 	}
 
+	// Get end timestamps
+	for track_no in 0..out_vec.len()-1 {
+		unsafe {
+			out_vec.get_unchecked_mut(track_no).track_end = match out_vec.get(track_no+1) {
+				Some(x) => x.track_start.clone(),
+				None => String::new()
+			};
+		}
+	}
+
 	return out_vec;
 }
