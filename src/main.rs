@@ -2,26 +2,34 @@ use std::io;
 
 mod processing;
 mod conversion;
+mod configuration;
 
 fn main() -> io::Result<()> {
-    let mut arguments = std::env::args();
+    let config = configuration::parse_args();
 
-    let file_path = match arguments.nth(1) {
-        Some(x) => x,
-        None => std::string::String::new(),
-    };
+    // Show help message and exit
+    if config.display_help {
+        configuration::print_help_message();
+        return Ok(());
+    }
 
-    let base_path = match std::path::Path::new(&file_path).parent() {
+    if !std::path::Path::new(&config.cuesheet_path).exists() {
+        eprintln!("Cue file '{}' does not exist", config.cuesheet_path);
+        configuration::print_help_message();
+        return Ok(());
+    }
+
+    let base_path = match std::path::Path::new(&config.cuesheet_path).parent() {
         Some(x) => x,
         None => panic!("Path had no base component"),
     };
 
-    let cuesheet_info = match processing::process_cuesheet(&file_path) {
+    let cuesheet_info = match processing::process_cuesheet(&config.cuesheet_path) {
         Ok(x) => x,
         Err(e) => panic!(e),
     };
 
-    // For the testing phase, just print out the information
+    // For the testing phase, print out the information
     println!("{}", cuesheet_info);
 
     for track in &cuesheet_info.tracks {
